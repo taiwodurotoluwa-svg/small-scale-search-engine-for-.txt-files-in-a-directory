@@ -12,7 +12,9 @@ def build_index(folder):
     files = os.listdir(folder)
     for file in files:
         filepath = os.path.join(folder, file)
-        with open(filepath, "r", encoding="utf-8") as file_reader:
+        if not os.path.isfile(filepath):
+            continue
+        with open(filepath, "r", encoding="utf-8", errors="ignore") as file_reader:
             content = file_reader.read()
             if '.' in content:
                 sentences = content.split('.')
@@ -73,7 +75,7 @@ def get_ordinal(n):
     
 def get_snippet(folder, file, pos):
     filepath = os.path.join(folder, file)
-    with open(filepath, "r", encoding="utf-8") as file_reader:
+    with open(filepath, "r", encoding="utf-8", errors="ignore") as file_reader:
         title = file_reader.readline().strip()
         file_reader.seek(0)
         content = file_reader.read()
@@ -98,6 +100,9 @@ def get_snippet(folder, file, pos):
 
 def main():
     folder = input("Enter the folder path you want to index: ")
+    if not os.path.isdir(folder):
+        print("That folder doesn't seem to exist. Try again!")
+        return
     index, titles = build_index(folder)
     print("Index built successfully!")
     while True:
