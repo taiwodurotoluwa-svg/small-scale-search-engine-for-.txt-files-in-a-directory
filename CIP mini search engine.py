@@ -15,9 +15,14 @@ def build_index(folder):
         with open(filepath, "r", encoding="utf-8") as file_reader:
             content = file_reader.read()
             if '.' in content:
-                title = content.split('.')[0].replace('\n', ' ').strip()
+                # Split the text at every period and keep only the first part
+                sentences = content.split('.')
+                first_sentence = sentences[0]
+                
+                # Remove any extra spaces or newlines around it
+                title = first_sentence.strip()
             else:
-                title = content.replace('\n', ' ').strip()
+                title = content.strip()
             titles[file] = title
             words = content.split()
             for position, word in enumerate(words):
